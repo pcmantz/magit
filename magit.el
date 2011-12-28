@@ -3413,12 +3413,13 @@ user input."
         (magit-init dir)
         (setq topdir (magit-get-top-dir dir))))
     (when topdir
-      (let ((buf (or (magit-find-status-buffer topdir)
+      (let ((proj (file-name-nondirectory
+                        (directory-file-name topdir)))
+            (buf (or (magit-find-status-buffer topdir)
                      (generate-new-buffer
-                      (concat "*magit: "
-                              (file-name-nondirectory
-                               (directory-file-name topdir)) "*")))))
+                      (concat "*magit: " proj "*")))))
         (funcall magit-status-buffer-switch-function buf)
+        (set (make-local-variable 'magit-project-name) proj)
         (magit-mode-init topdir 'magit-status-mode #'magit-refresh-status)))))
 
 (magit-define-command automatic-merge (revision)
